@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import hw1_modules
 
 def displayDigit(row):
     digit_array = np.array(row)

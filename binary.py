@@ -3,6 +3,7 @@ import numpy as np
 import scipy as sp
 import scipy.spatial.distance as spd
 import itertools as it
+import hw1_modules
 
 
 data = pd.read_csv("train.csv", dtype={"label" : "category"})
