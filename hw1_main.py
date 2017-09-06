@@ -25,7 +25,7 @@ data = pd.read_csv("train.csv", dtype={"label" : "category"})
 
 '''
 for i in (range(0, 10)):
-    for j in range(0,1000):
+    for j in range(0,len(data)-1:
         if int(small_data.iloc[j,:].loc["label"]) == i:
             displayDigit(small_data.iloc[j, 1:])
             break
