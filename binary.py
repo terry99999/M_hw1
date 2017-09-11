@@ -9,7 +9,6 @@ import matplotlib.pyplot as mp
 
 data = pd.read_csv("train.csv", dtype={"label" : "category"})
 
-
 #Dictionary of desired lables (0 and 1)
 values = {"label" : ["0","1"]}
 
@@ -50,8 +49,10 @@ false_impostor_rate=1-genuine_rate
 
 #plot the Genuine to Impostor rate, add EER line
 mp.plot(genuine_rate, impostor_rate, lw=3)
-mp.title("Genuine relative to Impostor over increasing Distance")
+mp.title("Impostor relative to Genuine over increasing Distance")
 mp.plot([1, 0], [0,1], color='navy', lw=1, linestyle='--')
+mp.xlabel('Genuine')
+mp.ylabel('Impostor')
 mp.show()
 
 #calculate and display EER

@@ -1,5 +1,7 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
+import scipy.spatial.distance as spd
+import scipy.stats as sps
 import matplotlib.pyplot as plt
 
 def displayDigit(row):
@@ -43,10 +45,10 @@ def knn_predict_class(trainvalues, trainlables, test, k):
 
         #partition sort (argpartition) the match array on distance column, where row k is guaranteed to have all
         #smaller distances above and all larger distances below
-        matches2 = matches[np.argpartition(matches[:, 1], k - 1, axis=0).transpose()]
+        matches = matches[np.argpartition(matches[:, 1], k - 1, axis=0).transpose()]
 
         #find the most frequent label among the k closest neighbors, and use that as predicted label for test element
-        predictions[i] = sps.mode(matches2[:k-1,0])[0]
+        predictions[i] = sps.mode(matches[:k-1,0])[0]
 
     #Return a vertical array of predicted labels for each test element
     return np.expand_dims(predictions.transpose(), axis=1)

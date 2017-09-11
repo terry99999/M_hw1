@@ -35,7 +35,7 @@ for train_idx, test_idx in kf.split(values, labels):
     test_data = values[test_idx]
     train_labels = labels[train_idx]
     test_lables = labels[test_idx]
-    #run one iterating of testing with knn
+    #run one iteration of testing with knn
     print("Testing data")
     predicted_labels = knn_predict_class(train_data, train_labels, test_data, k_neighbors)
     print("Accuracy for this run" + str(sum(predicted_labels == test_lables)/len(test_lables)))

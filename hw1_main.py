@@ -1,55 +1,50 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import hw1_modules
+from hw1_modules import *
 
 
+# read data from CSV to array
+train_values = np.array(pd.read_csv("train.csv").values)
+test_data = np.array(pd.read_csv("test.csv").values)
 
-small_data = pd.read_csv("train_small.csv", dtype={"label" : "category"})
-med_data = pd.read_csv("train_med.csv", dtype={"label" : "category"})
-#print(small_data.head())
+print(test_data.shape)
+test_data1 = test_data[0:5000,:]
+test_data2 = test_data[5000:10000,:]
+test_data3 = test_data[10000:15000,:]
+test_data4 = test_data[15000:20000,:]
+test_data5 = test_data[20000:25000,:]
+test_data6 = test_data[25000:,:]
+del test_data
 
-data = pd.read_csv("train.csv", dtype={"label" : "category"})
+#separate values and labels into separate arrays, don't duplicate full dataset
+train_labels = train_values[:,0]
+train_values = train_values[:,1:]
 
-#small_data["label"] = small_data["label"].astype("category")
-
-
-'''
-for i in (range(0, 10)):
-    for j in range(0,len(data)-1:
-        if int(small_data.iloc[j,:].loc["label"]) == i:
-            displayDigit(small_data.iloc[j, 1:])
-            break
-
-
-plt.hist(data["label"].astype(int), rwidth=.5, normed=True, bins=10)
-plt.xticks(np.arange(0,10, 1))
-plt.show()
-'''
+#convert labels array to vertical, 2d array of one column
+train_labels = np.expand_dims(train_labels, axis=1)
 
 
+print(train_values.shape)
+print(train_labels.shape)
+print(test_data1.shape)
 
-digit_source_array = np.array([1,0,16,7,3,8,21,6,10,11])
+number_neighbors = 3
 
-digit_test = pd.DataFrame(np.concatenate([np.array([0,1,2,3,4,5,6,7,8,9]).reshape((10,1)), digit_source_array.reshape((10,1)), np.full([10,1], np.NaN),np.full([10,1], np.inf),np.full([10,1], np.nan)], axis=1), columns=["Digit", "SourceIdx", "MatchIdx", "MatchDist", "MatchLabel"])
-digit_test["Digit"] = digit_test["Digit"].astype(int)
+predictions1 = knn_predict_class(train_values, train_labels, test_data1, number_neighbors)
+predictions2 = knn_predict_class(train_values, train_labels, test_data2, number_neighbors)
+predictions3 = knn_predict_class(train_values, train_labels, test_data3, number_neighbors)
+predictions4 = knn_predict_class(train_values, train_labels, test_data4, number_neighbors)
+predictions5 = knn_predict_class(train_values, train_labels, test_data5, number_neighbors)
+predictions6 = knn_predict_class(train_values, train_labels, test_data6, number_neighbors)
+#predictions = pd.concat(predictions, pd.DataFrame(predictions1))
+print(predictions1.shape)
+print(predictions1)
 
+predictions = np.concatenate((predictions1, predictions2, predictions3, predictions4, predictions5, predictions6))
+print(predictions.shape)
 
+predictions_df = pd.DataFrame(predictions, columns=["Labels"])
 
-
-for i in range (0, digit_test.shape[0]):
-    print("Evaluating " + str(i))
-    for j in range (0, data.shape[0]):
-#        print(str(i) + " , " + str (j))
-        distance = l2distance(data.iloc[int(digit_test.iat[i,1])], data.iloc[j])
-        if distance == 0:
-            continue
-        elif distance < digit_test.iat[i,3]:
-            digit_test.iat[i,3] = distance
-            digit_test.iat[i,2] = j
-            digit_test.iat[i,4] = data.iat[j,0]
-        else:
-            continue
-
-
-print(digit_test)
+print(predictions_df)
+predictions_df.to_csv("test_predictions.csv", header=True, index_label="ImageId")
